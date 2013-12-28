@@ -1,12 +1,11 @@
 #!/bin/bash -l
-#SBATCH -D /home/jri/projects/bigd/angsdo/
+#SBATCH -D /home/jri/projects/bigd/angsbigd/
 #SBATCH -J bam_merge
 #SBATCH -o outs/out-%j.txt
 #SBATCH -p bigmem
 #SBATCH -e errors/error-%j.txt
 
 # merge bam files to single individuals 
-cd /group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/
 
 for i in $( ls /group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/ | cut -f 1 -d "_" | sort -n | uniq ); do
 
