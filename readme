@@ -1,1 +1,17 @@
 # Angsd redo of bigd windowed popgen stats
+
+## Files
+
+Assumes you have folder of bam files. In my case, these are on Farm at:
+
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/
+
+and are all named as LineName_LaneInfo.bam, e.g.
+
+W22_FC6162CAAXX_4.bam
+
+To run on different folder or different naming convention scripts will need to be modified.
+
+## To Run
+
+First, run merge.sh to merge bamfiles. May need to be modified (see above). This is because ANGSD treats each bamfile as an individual.
