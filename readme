@@ -15,3 +15,7 @@ To run on different folder or different naming convention scripts will need to b
 ## To Run
 
 First, run merge.sh to merge bamfiles. May need to be modified (see above). This is because ANGSD treats each bamfile as an individual.
+
+## Files
+
+outs/TRIP_try <- these are the ancestral fasta files used for the SFS. Needed even if you choose folded (why?)
