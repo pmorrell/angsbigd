@@ -1,4 +1,0 @@
-/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/BKN010_merged.bam
-/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/BKN011_merged.bam
-/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/BKN014_merged.bam
-/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/BKN009_merged.bam

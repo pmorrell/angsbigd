@@ -29,19 +29,25 @@
 #esac
 #done
 
-
-
-
 # script to run ANGSD on hapmap2 bam files
 module load angsd
 
+taxon=$1
+echo "taxon: $taxon" 1>&2
+
 #(estimate an SFS)
 #NB this TRIP file is a temporary file based on one BAM. Do not use for real stuff.
-angsd -bam data/BKN_list.txt -out temp/BKN_pest -doSaf 1 -uniqueOnly 1 -fold 1 -anc temp/TRIP_try.fa.gz -minMapQ 20 -minQ 1 -GL 1 -r 10:
-emOptim2 temp/BKN_pest.saf 8 > temp/BKN_pest.em.ml -nSites 10000
+echo "step 1 sfs" 1>&2
+
+angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 20 -minQ 1 -GL 1 -r 10:1-10000000
+
+echo "step 2 em stuff" 1>&2
+# num chromes should = n for folded and 2n for unfolded
+emOptim2 temp/"$taxon"_pest.saf expr 2 \* $( wc -l data/"$taxon"_list.txt | cut -f 1 -d " " ) -nSites 10000000 > temp/"$taxon"_pest.em.ml
 
 #(calculate thetas)
-angsd -bam data/BKN_list.txt -out results/BKN_thetas -doThetas 1 -doSaf 1 -pest temp/BKN_pest.saf 
+echo "step 3 thetas" 1>&2
+angsd -bam data/"$taxon"_list.txt -out results/"$taxon"_thetas -doThetas 1 -doSaf 1 -GL 1 -pest temp/"$taxon"_pest.em.ml -anc data/TRIP.fa.gz -r 10:1-10000000 -win 50000 -step 10000 -P 4
 
 #(calculate Tajimas.)
 #../angsd0.551/misc/bgid make_bed bongo.thetas.gz 

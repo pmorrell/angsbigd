@@ -1,0 +1,15 @@
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL01_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL02_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL03_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL04-TIP454_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL05_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL06-TIP260_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL07_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL09_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL10_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL11_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL12_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL14-TIP498_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL15_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL16_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL17_merged.bam
