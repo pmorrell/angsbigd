@@ -14,8 +14,31 @@ To run on different folder or different naming convention scripts will need to b
 
 ## To Run
 
-First, run merge.sh to merge bamfiles. May need to be modified (see above). This is because ANGSD treats each bamfile as an individual.
+First, run merge.sh to merge bamfiles. This is because ANGSD treats each bamfile as an individual.
+
+Run trip.sh to make ancestral pseudo-fasta from Tripsacum
+
+run angsdo to generate sfs, bedfile of thetas, and windowed TajD across region. 
+Note default region is currently chr 1. 
+Angsdo is where you can modify things like min depth, uniqueness, base quality, but these are currently wild guesses are hardcoded into script.
 
 ## Files
 
-outs/TRIP_try <- these are the ancestral fasta files used for the SFS. Needed even if you choose folded (why?)
+#### data:
+
+TRIP* <- these are the ancestral fasta files used for the SFS. Needed even if you choose folded (why?)
+
+data/*_list.txt <- lists of bamfiles to run on
+
+#### results:
+
+BKN_pest.arg  <- arguments given to angsd
+BKN_pest.em.ml <- ML SFS 
+BKN.arg <- arguments given to angsd
+BKN.bin  BKN.idx  BKN.pestPG  <- not sure yet, but think includes BEDfile of theta values?
+BKN.thetas.gz <- theta values
+
+#### temp:
+
+ BKN_pest.saf  BKN_pest.saf.pos.gz <- not sure yet
+
