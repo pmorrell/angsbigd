@@ -10,6 +10,7 @@
 # script to run ANGSD on hapmap2 bam files
 module load angsd
 
+angsdir=/home/jri/src/angsd0.577/
 taxon=$1
 windowsize=100
 step=100
@@ -19,20 +20,20 @@ echo "taxon: $taxon n: $n" range: $range 1>&2
 
 #(estimate an SFS)
 
-echo CMD angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20 -uniqueOnly 1 -baq 1 -GL 1 -r $range -P 8 1>&2
-angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20 -uniqueOnly 1 -baq 1 -GL 1 -r $range -P 8
+echo CMD angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20  -baq 1 -GL 1 -r $range -P 8 1>&2
+$angsdir/angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -indF data/$taxon.indF -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20 -baq 1 -GL 1 -r $range -P 8
 
 # num chromes should = n for folded and 2n for unfolded
 echo CMD emOptim2 temp/"$taxon"_pest.saf $n -P 8 > results/"$taxon"_pest.em.ml 1>&2
-emOptim2 temp/"$taxon"_pest.saf $n -P 8 > results/"$taxon"_pest.em.ml
+$angsdir/misc/emOptim2 temp/"$taxon"_pest.saf $n -P 8 > results/"$taxon"_pest.em.ml
 
 
 #(calculate thetas)
-echo CMD angsd -bam data/"$taxon"_list.txt -out results/"$taxon" -doThetas 1 -doSaf 1 -GL 1 -pest results/"$taxon"_pest.em.ml -anc data/TRIP.fa.gz -r $range -P 8 1>&2
-angsd -bam data/"$taxon"_list.txt -out results/"$taxon" -doThetas 1 -doSaf 1 -GL 1 -pest results/"$taxon"_pest.em.ml -anc data/TRIP.fa.gz -r $range -P 8
+echo CMD angsd -bam data/"$taxon"_list.txt -out results/"$taxon" -doThetas 1 -doSaf 1 -GL 1 -indF data/$taxon.indF -pest results/"$taxon"_pest.em.ml -anc data/TRIP.fa.gz -r $range -P 8 1>&2
+$angsdir/angsd -bam data/"$taxon"_list.txt -out results/"$taxon" -doThetas 1 -doSaf 1 -GL 1 -indF data/$taxon.indF -pest results/"$taxon"_pest.em.ml -anc data/TRIP.fa.gz -r $range -P 8
 
 #(calculate Tajimas.)
 echo CMD thetaStat make_bed results/"$taxon".thetas.gz results/"$taxon" 1>&2
-thetaStat make_bed results/"$taxon".thetas.gz results/"$taxon"
+$angsdir/misc/thetaStat make_bed results/"$taxon".thetas.gz results/"$taxon"
 echo CMD thetaStat do_stat results/"$taxon" -nChr $n -win $windowsize -step $step 1>&2
-thetaStat do_stat results/"$taxon" -nChr $n -win $windowsize -step $step
+$angsdir/misc/thetaStat do_stat results/"$taxon" -nChr $n -win $windowsize -step $step

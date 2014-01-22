@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #SBATCH -D /home/jri/projects/bigd/angsbigd/
-#SBATCH -J angsdo
+#SBATCH -J inbreeding
 #SBATCH -o outs/out-%j.txt
 #SBATCH -p bigmem
 #SBATCH -e errors/error-%j.txt
@@ -31,7 +31,7 @@ echo "/home/jri/src/ngsTools/ngsF/ngsF -n_ind $n -glf temp/$taxon.glf -out $taxo
 #(estimate an SFS)
 
 echo CMD angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20 -uniqueOnly 1 -baq 1 -GL 1 -r $range -P 8 1>&2
-/home/jri/src/ngsTools/angsd/angsd -bam data/"$taxon"_list.txt -indF results/$taxon.indF -out temp/"$taxon"_pest -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20 -uniqueOnly 1 -baq 1 -GL 1 -r $range -P 8
+/home/jri/src/ngsTools/angsd/angsd -bam data/"$taxon"_list.txt -indF results/$taxon.indF -out temp/"$taxon"_pest -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20 -baq 1 -GL 1 -r $range -P 8
 
 # num chromes should = n for folded and 2n for unfolded
 echo CMD emOptim2 temp/"$taxon"_pest.saf $n -P 8 > results/"$taxon"_pest.em.ml 1>&2
