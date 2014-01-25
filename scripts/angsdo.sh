@@ -33,6 +33,7 @@ echo "taxon: $taxon n: $n" range: $range 1>&2
 # -GL $glikehood 1 is samtools, 2 is GATK, 3 SOAPsnp 4 SYK
 # -r 10:1- ony analyze this range (here all of chromosome 10)
 # -P 8 use 8 threads
+# -indF individiual inbreeding coefficient. for inbred lines just make a files of "1" on each line for each bamfile. otherwise use ngsF to estimate (see inbreeding.sh script)
 echo CMD angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20  -baq 1 -GL $glikehood -r $range -P 8 1>&2
 $angsdir/angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -indF data/$taxon.indF -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20 -baq 1 -GL $glikehood -r $range -P 8
 
