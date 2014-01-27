@@ -15,7 +15,7 @@ taxon=$1
 windowsize=1000
 step=500
 n=$( expr 2 \* $( wc -l data/"$taxon"_list.txt | cut -f 1 -d " " ))
-range="10:1-"
+range=""
 glikehood=1
 
 echo "taxon: $taxon n: $n" range: $range 1>&2
@@ -34,8 +34,8 @@ echo "taxon: $taxon n: $n" range: $range 1>&2
 # -r 10:1- ony analyze this range (here all of chromosome 10)
 # -P 8 use 8 threads
 # -indF individiual inbreeding coefficient. for inbred lines just make a files of "1" on each line for each bamfile. otherwise use ngsF to estimate (see inbreeding.sh script)
-echo CMD angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20  -baq 1 -GL $glikehood -r $range -P 8 1>&2
-$angsdir/angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -indF data/$taxon.indF -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20 -baq 1 -GL $glikehood -r $range -P 8
+echo CMD angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20  -baq 1 -GL $glikehood $range -P 8 1>&2
+$angsdir/angsd -bam data/"$taxon"_list.txt -out temp/"$taxon"_pest -indF data/$taxon.indF -doSaf 1 -uniqueOnly 1 -anc data/TRIP.fa.gz -minMapQ 40 -minQ 20 -setMaxDepth 20 -baq 1 -GL $glikehood $range -P 8
 
 # not clear to me how to run folded, as -fold option seems to be deprecated?
 # temp/"$taxon"_pest.saf output file from above run; prior on SFS?
@@ -63,8 +63,8 @@ $angsdir/misc/emOptim2 temp/"$taxon"_pest.saf $n -P 8 > results/"$taxon"_pest.em
 #10      3371    -8.822116       -10.395367      -7.431857       -14.041094      -11.062746
 #10      3372    -8.840759       -10.415518      -7.448764       -14.064022      -11.082968
 #10	26926	-1.480456	-0.671793	-211.328599	-0.694813	-0.683237
-echo CMD angsd -bam data/"$taxon"_list.txt -out results/"$taxon" -doThetas 1 -doSaf 1 -GL $glikehood -indF data/$taxon.indF -pest results/"$taxon"_pest.em.ml -anc data/TRIP.fa.gz -r $range -P 8 1>&2
-$angsdir/angsd -bam data/"$taxon"_list.txt -out results/"$taxon" -doThetas 1 -doSaf 1 -GL $glikehood -indF data/$taxon.indF -pest results/"$taxon"_pest.em.ml -anc data/TRIP.fa.gz -r $range -P 8
+echo CMD angsd -bam data/"$taxon"_list.txt -out results/"$taxon" -doThetas 1 -doSaf 1 -GL $glikehood -indF data/$taxon.indF -pest results/"$taxon"_pest.em.ml -anc data/TRIP.fa.gz  $range -P 8 1>&2
+$angsdir/angsd -bam data/"$taxon"_list.txt -out results/"$taxon" -doThetas 1 -doSaf 1 -GL $glikehood -indF data/$taxon.indF -pest results/"$taxon"_pest.em.ml -anc data/TRIP.fa.gz  $range -P 8
 
 #(calculate Tajimas.)
 # this estiamtes TajD and other stats and makes a sortof bedfile output
