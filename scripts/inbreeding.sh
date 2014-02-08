@@ -11,10 +11,7 @@
 module load angsd
 
 taxon=$1
-ploidy=1
-windowsize=100
-step=100
-n=$( expr $ploidy \* $( wc -l data/"$taxon"_list.txt | cut -f 1 -d " " ))
+n=$( expr 2 \* $( wc -l data/"$taxon"_list.txt | cut -f 1 -d " " ))
 range="10:1-"
 echo "taxon: $taxon n: $n" range: $range 1>&2
 

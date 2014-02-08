@@ -1,0 +1,2 @@
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL25-TIP489_merged.bam
+/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TIL08_merged.bam
