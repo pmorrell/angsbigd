@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #SBATCH -D /home/jri/projects/bigd/angsbigd/
-#SBATCH -J angsdo
+#SBATCH -J abba-baba
 #SBATCH -o outs/out-%j.txt
 #SBATCH -p bigmem
 #SBATCH -e errors/error-%j.txt
@@ -18,8 +18,10 @@ n=$( expr 2 \* $( wc -l data/"$taxon"_list.txt | cut -f 1 -d " " ))
 range=""
 glikehood=1
 
-echo "taxon: $taxon n: $n" range: $range 1>&2
+echo "taxon: $taxon n: $n range: $range" 1>&2
 
-$angsdir/angsd  -out temp/"$taxon" -doAbbababa 1 -bam data/"$taxon"_list.txt -doCounts 1 -anc  data/TRIP.fa.gz  -minMapQ 40 -minQ 20 -setMaxDepth 20  -baq 1 -GL $glikehood $range -P 8
-Rscript $angsdir/R/jackKnife.R file=out.abbababa indNames=smallBam.filelist outfile=out
-
+echo "$angsdir/angsd  -out temp/"$taxon" -doAbbababa 1 -bam data/"$taxon"_list.txt -doCounts 1 -anc  data/TRIP.fa.gz  -minMapQ 40 -minQ 20 -setMaxDepth 20  -baq 1 -GL $glikehood $range -P 8" 1>&2
+$angsdir/angsd  -out temp/"$taxon" -doAbbababa 0 -bam data/"$taxon"_list.txt -doCounts 1 -anc  data/TRIP.fa.gz  -P 8
+#-minMapQ 40 -minQ 20 -setMaxDepth 20  -baq 1 -GL $glikehood $range -P 8
+echo "Rscript $angsdir/R/jackKnife.R file=temp/"$taxon".abbababa indNames=data/"$taxon"_list.txt outfile=results/"$taxon".abba.baba" 1>&2
+Rscript $angsdir/R/jackKnife.R file=temp/"$taxon".abbababa indNames=data/"$taxon"_list.txt outfile=results/"$taxon".abba.baba
