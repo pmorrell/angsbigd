@@ -2,7 +2,7 @@
 
 This repository is modified from the Ross-Ibarra BigD ANGSD repository at https://github.com/rossibarra/angsbigd
 
-## Files
+## Inputs and Data
 
 Required data:
 - BAM files, sorted, indexed
@@ -21,6 +21,8 @@ These, respecitively, are located in the following places on our MSI shared spac
 - /home/morrellp/shared/Datasets/NGS/Alignments/???
 
 Our reference sequence directory is /home/morrellp/shared/References/Reference_Sequences/Barley/Morex/. There are both the puiblished version of the Morex assembly and the pseudo-scaffolds created by M. Mascher. 
+
+Have yet to figure out where to store data during the analysis. In shared space, or in individual home directories?
 
 ## To Run
 
