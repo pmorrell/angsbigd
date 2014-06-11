@@ -20,6 +20,8 @@ These, respecitively, are located in the following places on our MSI shared spac
 - /home/morrellp/shared/Datasets/NGS/Alignments/2014-03-07_IPK_BAMs
 - /home/morrellp/shared/Datasets/NGS/Alignments/???
 
+Our reference sequence directory is /home/morrellp/shared/References/Reference_Sequences/Barley/Morex/. There are both the puiblished version of the Morex assembly and the pseudo-scaffolds created by M. Mascher. 
+
 ## To Run
 
  * First, run merge.sh to merge bamfiles. This is because ANGSD treats each bamfile as an individual.
