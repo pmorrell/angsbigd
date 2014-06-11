@@ -1,16 +1,24 @@
-# Angsd redo of bigd windowed popgen stats
+# ANGSD Analysis of Barley Exome Capture Data
+
+This repository is modified from the Ross-Ibarra BigD ANGSD repository at https://github.com/rossibarra/angsbigd
 
 ## Files
 
-Assumes you have folder of bam files. In my case, these are on Farm at:
+Required data:
+- BAM files, sorted, indexed
+- Reference assembly, as FASTA
+- Outgroup sequence, as BAM
+- Individual inbreeding coefficients for each sample
 
-/group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/
+We have three datasets that we will operate on:
+- Deleterious Mutations dataset (BAM files for the nine samples used in Deleterious Mutations)
+- IPK BAMs (BAM files provided by M. Mascher from IPK)
+- IPK Remapped (Re-mapping of reads from IPK samples, done by CL)
 
-and are all named as LineName_LaneInfo.bam, e.g.
-
-W22_FC6162CAAXX_4.bam
-
-To run on different folder or different naming convention scripts will need to be modified.
+These, respecitively, are located in the following places on our MSI shared space:
+- /home/morrellp/shared/Datasets/NGS/Alignments/Deleterious_Mutations
+- /home/morrellp/shared/Datasets/NGS/Alignments/2014-03-07_IPK_BAMs
+- /home/morrellp/shared/Datasets/NGS/Alignments/???
 
 ## To Run
 
