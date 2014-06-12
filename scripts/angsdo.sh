@@ -31,10 +31,6 @@ ANGSD_DIR=/home/morrellp/shared/Software/angsd${ANGSD_VERSION}
 TAXON=cultivar
 TAXON_LIST=data/${TAXON}_samples.txt
 TAXON_INBREEDING=data/${TAXON}_F.txt
-#   For windowed analyses, we modify these variables.
-#   These are in units of basepairs (bp)
-WINDOW_SIZE=1000
-WINDOW_STEP=500
 #   The number of individuals in the taxon we are analyzing
 #   We use an embedded command to do this
 #   ( wc -l < FILE will return just the line count of FILE,
@@ -128,60 +124,140 @@ N_CORES=32
 REGIONS="-r 10:"
 
 #   Now we actually run the command
-${ANGSD_DIR}/angsd -bam ${TAXON_LIST}\
-                   -out ${TAXON}_SFSOut\
-                   -indF ${TAXON_INBREEDING}\
-                   -doSaf ${DO_SAF}\
-                   -uniqueOnly ${UNIQUE_ONLY}\
-                   -anc ${ANCESTRAL}\
-                   -minMapQ ${MIN_MAPQ}\
-                   -minQ ${MIN_BASEQUAL}\
-                   -nInd ${N_IND}\
-                   -minInd ${MIN_IND}\
-                   -baq ${BAQ}\
-                   -ref ${REF_DIR}/${REF_SEQ}\
-                   -GL ${GT_LIKELIHOOD}\
-                   -P ${N_CORES}\
-                   -doCounts\
-                   -doDepth\
-                   -dumpCounts\
-                   ${REGIONS}
+${ANGSD_DIR}/angsd \
+    -bam ${TAXON_LIST}\
+    -out ${TAXON}_SFSOut\
+    -indF ${TAXON_INBREEDING}\
+    -doSaf ${DO_SAF}\
+    -uniqueOnly ${UNIQUE_ONLY}\
+    -anc ${ANCESTRAL}\
+    -minMapQ ${MIN_MAPQ}\
+    -minQ ${MIN_BASEQUAL}\
+    -nInd ${N_IND}\
+    -minInd ${MIN_IND}\
+    -baq ${BAQ}\
+    -ref ${REF_DIR}/${REF_SEQ}\
+    -GL ${GT_LIKELIHOOD}\
+    -P ${N_CORES}\
+    -doCounts\
+    -doDepth\
+    -dumpCounts\
+    ${REGIONS}
 
-# not clear to me how to run folded, as -fold option seems to be deprecated?
-# temp/"$taxon"_pest.saf output file from above run; prior on SFS?
-# $n number of chromosomes; 2 x number of inds for diploids
-# results/"$taxon"_pest.em.ml This output is the final estimated SFS
-	# the file will be nat. log probabilities of the value of the SFS from 0:n
-	# so if n=10, there will be 11 numbers.  To plot the SFS for polymorphic sites only, ignore the first and last numbers. e.g. for teosinte I get:
-	# -0.133730 -3.724029 -4.246469 -4.981319 -5.453217 -5.803669 -6.076224 -6.330416 -6.501992 -6.713127 -6.882129 -6.970549 -7.289374 -7.434923 -7.308903 -7.057695 -7.457825 -7.740251 -7.665521 -7.683324 -7.788163 -7.702094 -7.562837 -7.491339 -7.416449 -7.364919 -7.107873 -6.870063 -6.458559 -6.044445 -2.994086
-	# which corresponds to exp(-0.13)~0.9 or 90% of sites are fixed for ancestral allele, and exp(-2.994086) or ~5% are fixed for derived allele. 
-	# remaining 5% are polymorphic
-$angsdir/misc/emOptim2 temp/"$taxon".saf $n -P $cpu  > results/"$taxon".sfs
+#   This next command estimates the SFS
+#   Notes from JRI:
+#       -fold option seems deprecated
+#       the .saf output file is prior on SFS, probably
+#       number of chromosomes is 2x number of samples
+#       .em.ml output file is the final estimate of SFS
+#       final SFS estimate will be ln(P) where P is the probability of the
+#       values of SFS from 0 to the sample size. (will give n+1 values total)
+#       for polymorphic sites, ignore the first and last numbers
+#       first number is ln(proportion fixed for ancestral allele)
+#       last number is ln(proportion fixed for derived allele)
+${ANGSD_DIR}/misc/emOptim2\
+    ${TAXON}_SFSOut.saf\
+    ${N_CHROM}\
+    -P ${N_CORES}\
+    > ${TAXON}_DerivedSFS
 
-#(calculate thetas)
-# this now uses the SFS to calculate stats
-# -doThetas 1 : calculate nucleotide diversity, thetaH, thetaL, wattersons theta
-# -pest this is the SFS estimated above
-# output $taxon.thetas will look like and have data for EVERY bp, including ones where thera are no polymorphisms. 
-# in example below it's estimating nucleotide diversity as 10^-10 for the first bp (probably not polymorphic)
-# but at site 26926 the estimate is 0.21 for pairwise nucleotide diversity ( that's polymorphic )
-#Chromo Pos     Watterson       Pairwise        thetaSingleton  thetaH  thetaL
-#10      3370    -8.664392       -10.223986      -7.289949       -13.844801      -10.890724
-#10      3371    -8.822116       -10.395367      -7.431857       -14.041094      -11.062746
-#10      3372    -8.840759       -10.415518      -7.448764       -14.064022      -11.082968
-#10	26926	-1.480456	-0.671793	-211.328599	-0.694813	-0.683237
-$angsdir/angsd -bam data/"$taxon"_list.txt -out results/"$taxon" -doThetas 1 -doSaf 2 -GL $glikehood -indF data/$taxon.indF -pest results/"$taxon".sfs -anc data/TRIP.fa.gz -uniqueOnly 0 -minMapQ $minMapQ -minQ 20 -nInd $nInd -minInd $minInd -baq 1 -ref /home/jri/genomes/Zea_mays.AGPv2.17.dna.toplevel.fa -P $cpu -doCounts -doDepth -dumpCounts $range
+#   Next, use the SFS to calculate various diversity stats
+#   Options:
+#       -doThetas [0|1]
+#           0: Do not estimate diversity
+#           1: Calculate nucleotide diversity, thetaH, thetaL, wattersons theta
+#       -pest [FILE]
+#           Use the esitmated SFS in [FILE]
+#           This is the output file from the above command
+#
+#   The .thetas output file will have seven columns, and contain data for every
+#   site in the input, including monomorphic sites. The values in the columns
+#   are powers of 10 for the estimate of diverstiy at that site
+#   Example output from JRI:
+#
+#Chromo Pos    Watterson  Pairwise    thetaSingleton  thetaH      thetaL
+#10     3370   -8.664392  -10.223986  -7.289949       -13.844801  -10.890724
+#10     3371   -8.822116  -10.395367  -7.431857       -14.041094  -11.062746
+#10     3372   -8.840759  -10.415518  -7.448764       -14.064022  -11.082968
+#10     26926  -1.480456  -0.671793   -211.328599     -0.694813   -0.683237
+#
+#   In this case, the first site is probably not polymorphic; the estimate of
+#   theta is ~10^(-10). The last site is probably polymorphic; the estimate of
+#   theta is about 10^(-0.67) ~ 0.22. This should be similar to the MAF at that
+#   position, too.
+#   I think for getting a locus average, we can just sum the values and divide
+#   by the locus length?
+#   It's also odd that there are no variances for these estimates - again
+#   perhaps we can do that on a per-locus basis?
 
-#(calculate Tajimas.)
-# this estiamtes TajD and other stats and makes a sortof bedfile output
-$angsdir/misc/thetaStat make_bed results/"$taxon".thetas.gz results/"$taxon"
+#   Set some operation-specific parameters here
+DO_THETAS=1
+PEST=${TAXON}_DerivedSFS
 
-# this does a sliding window analysis
-# -nChr number of chromosomes
-# -step how many bp to step between windows
-# -win window size
-# output (in this case $taxon.pestPG will look like:
-#(569,1175)(4000,5001)(4000,5000)        10      4500    4.536109        4.774793        1.392152        9.523595        7.149193        0.169980        1.0433
-#(963,1565)(4706,5500)(4500,5500)        10      5000    2.850285        2.665415        1.624860        4.608032        3.636723        -0.196105       0.4532
-# with information for each window (see ANGSD online documentation for some explanation of columns)
-$angsdir/misc/thetaStat do_stat results/"$taxon" -nChr $n -win $windowsize -step $step
+#   And actually run the command
+${ANGSD_DIR}/angsd\
+    -bam ${TAXON_LIST}\
+    -out ${TAXON}_Divsersity\
+    -indF ${TAXON_INBREEDING}\
+    -doSaf ${DO_SAF}\
+    -doThetas ${DO_THETAS}\
+    -uniqueOnly ${UNIQUE_ONLY}\
+    -anc ${ANCESTRAL}\
+    -minMapQ ${MIN_MAPQ}\
+    -minQ ${MIN_BASEQUAL}\
+    -nInd ${N_IND}\
+    -minInd ${MIN_IND}\
+    -baq ${BAQ}\
+    -ref ${REF_DIR}/${REF_SEQ}\
+    -GL ${GT)LIKELIHOOD}\
+    -P ${N_CORES}\
+    -pest ${PEST}\
+    -doCounts\
+    -doDepth\
+    -dumpCounts\
+    ${REGIONS}
+
+#   Next is to calculate Tajima's estimator
+#   This makes a somewhat bedfile-like output including Tajima's D and others
+${ANGSD_DIR}/misc/thetaStat make_bed\
+    ${TAXON}_Diversity.thetas.gz\
+    ${TAXON}_Tajimas
+
+#   This calculates Tajima's D (And other statistics) in sliding windows
+#   Options:
+#       -nChr [INT]
+#           [INT] number of chromosomes
+#       -step [INT]
+#           Step [INT] basepairs between windows
+#       -win [INT]
+#           Windows are [INT] basepairs wide
+#   This will output a .pestPG file which will contain 14 column file
+#   The columns are
+#       1: (indexStart,indexStop)(posStart,posStop)(regStat,regStop)
+#       2: chrname - chromosome name
+#       3: wincenter - center of window
+#       4: tW - Watterson's Theta
+#       5: tP - Pairwise Theta (pi?)
+#       6: tF - Fu and Li?
+#       7: tH - Fay?
+#       8: tL - Fay?
+#       9: tajD - Tajima's D
+#       10: fulif - Fu and Li's F
+#       11: fuliD - Fu and Li's D
+#       12: fayH - Fay and Wu?
+#       13: zengsE - Zheng's E
+#       14: numSites - Number of sites in window
+#   There will be one row per window
+#   For more information see:
+#       http://popgen.dk/angsd/index.php/Tajima#.thetas.gz.pestPG
+
+#   Set some operation-specific parameters
+WINDOW_SIZE=1000
+WINDOW_STEP=500
+
+#   And run the analysis!
+${ANGSD_DIR}/misc/thetaStat do_stat\
+    ${TAXON}_Tajimas\
+    -nChr ${N_CHROM}\
+    -win ${WINDOW_SIZE}\
+    -step ${WINDOW_STEP}
