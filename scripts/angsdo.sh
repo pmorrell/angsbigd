@@ -1,5 +1,4 @@
 #!/bin/sh
-
 #PBS -l mem=16gb,nodes=1,ppn=1,walltime=72:00:00
 #PBS -m abe
 #PBS -M konox006@umn.edu
