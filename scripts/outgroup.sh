@@ -17,6 +17,7 @@ ANCESTRAL=/home/morrellp/shared/Datasets/NGS/Alignments/2014-03-07_IPK_BAMs/Disk
 OUT=/home/pmorrell/shared/Datasets/NGS/Alignments/Deleterious_Mutations/Hbulbosum_UMN
 
 ${ANGSD_DIR}/angsd \
-    -i $ANCESTRAL
-    -doFasta 1
+    -i $ANCESTRAL \
+    -doFasta 2 \
+    -doCounts 1 \
     -out $OUT
