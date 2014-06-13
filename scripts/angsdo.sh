@@ -1,20 +1,18 @@
 #!/bin/bash -l
-#SBATCH -D /home/jri/projects/bigd/angsbigd/
-#SBATCH -J angsdo
-#SBATCH -o outs/out-%j.txt
-#SBATCH -p bigmem
-#SBATCH -e errors/error-%j.txt
-#SBATCH -c 8
+#PBS -l walltime=10:00:00,mem=4gb,nodes=4:ppn=1
+#PBS -m abe -M pmorrell@umn.edu
 
+# script to run ANGSD on barley bam files
+# ANGSD not yet install at MSI system level, but will request that
+# module load angsd
 
-# script to run ANGSD on hapmap2 bam files
-module load angsd
-
-angsdir=/home/jri/src/angsd0.577/
+angsdir=~/Apps/ANGSD/angsd0.600/
+# we can use this taxon list to split samples, but for now will pass "DM" as a shell argument
 taxon=$1
 windowsize=1000
 step=500
-n=$( expr 2 \* $( wc -l data/"$taxon"_list.txt | cut -f 1 -d " " ))
+# for most barley accessions, we generally use 
+n=$( expr 2 \* $( wc -l data/"$taxon"_BAMlist.txt | cut -f 1 -d " " ))
 range=""
 glikehood=1
 

@@ -1,10 +1,22 @@
 #!/bin/bash -l
-#PBS -l walltime=10:00:00,mem=4gb,nodes=4:ppn=1
-#PBS -m abe -M pmorrell@umn.edu
+#PBS -L ,mem=4gb,nodes=1:ppn=1; walltime=10:00:00
+#PBS -m abe 
+#PBS -M pmorrell@umn.edu
+#PBS -q lab
 
-ANGSD=~/Apps/ANGSD/angsd0.600/angsd
+# borrowing from Tom Kono's version of angsdo.sh
+ANGSD_VERSION=0.602
+ANGSD_DIR=/home/morrellp/shared/Software/angsd${ANGSD_VERSION}
 
-#angsd -i /group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TDD39103_ZEAHWCRAYDIAAPE_7.bam -doFasta 1 -out /home/jri/projects/bigd/angsbigd/outs/TRIP_try
-#angsd -i /group/jrigrp/hapmap2_bam/Disk3CSHL_bams_bwamem/TDD39103_merged.bam -doFasta 1 -out /home/jri/projects/bigd/angsbigd/data/TRIP
+# outgroup sample BAM file, aligned to reference
+# currently this is a Hordeum bulbosum sample aligned to Morex WGS
+ANCESTRAL=/home/morrellp/shared/Datasets/NGS/Alignments/2014-03-07_IPK_BAMs/Disk_3/bams/Sample_Bulbosum_UMN_rmdup.bam
 
-$ANGSD -i ~/shared/Datasets/NGS/Alignments/2014-03-07_IPK_BAMs/Disk_3/bams/Sample_Bulbosum_UMN_rmdup.bam -doFasta 1 -out ~/shared/ANGSD/IPK/Hbulbosum_UMN
+#output fasta file
+#automagically receives extensions .fa.gz
+OUT=/home/pmorrell/shared/Datasets/NGS/Alignments/Deleterious_Mutations/Hbulbosum_UMN
+
+${ANGSD_DIR}/angsd \
+    -i $ANCESTRAL
+    -doFasta 1
+    -out $OUT
