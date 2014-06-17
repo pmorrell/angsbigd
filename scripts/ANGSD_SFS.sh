@@ -9,6 +9,9 @@
 
 #   Last Modified: 2014-06-11
 #   CHANGES
+#		2014-06-17
+#           - Changed parameters so that we could estimate the derived SFS, required
+#             -doMaf 1 and -doMajorMinor 1 
 #       2014-06-11
 #           - Cleaned uop the script, fixed some directory names for pointing
 #             to directories in our MSI shared space.
@@ -40,6 +43,7 @@ N_IND=`wc -l < ${TAXON_LIST}`
 #   each individual has two chromosomes. The individual inbreeding coefficents
 #   take care of the mismatch between these two numbers
 N_CHROM=`expr 2 \* ${N_IND}`
+
 
 #   This first command estimates the site frequency spectrum
 #   Options:
@@ -222,42 +226,3 @@ ${ANGSD_DIR}/angsd\
 ${ANGSD_DIR}/misc/thetaStat make_bed\
     ${TAXON}_Diversity.thetas.gz\
     ${TAXON}_Tajimas
-
-#   This calculates Tajima's D (And other statistics) in sliding windows
-#   Options:
-#       -nChr [INT]
-#           [INT] number of chromosomes
-#       -step [INT]
-#           Step [INT] basepairs between windows
-#       -win [INT]
-#           Windows are [INT] basepairs wide
-#   This will output a .pestPG file which will contain 14 column file
-#   The columns are
-#       1: (indexStart,indexStop)(posStart,posStop)(regStat,regStop)
-#       2: chrname - chromosome name
-#       3: wincenter - center of window
-#       4: tW - Watterson's Theta
-#       5: tP - Pairwise Theta (pi?)
-#       6: tF - Fu and Li?
-#       7: tH - Fay?
-#       8: tL - Fay?
-#       9: tajD - Tajima's D
-#       10: fulif - Fu and Li's F
-#       11: fuliD - Fu and Li's D
-#       12: fayH - Fay and Wu?
-#       13: zengsE - Zheng's E
-#       14: numSites - Number of sites in window
-#   There will be one row per window
-#   For more information see:
-#       http://popgen.dk/angsd/index.php/Tajima#.thetas.gz.pestPG
-
-#   Set some operation-specific parameters
-WINDOW_SIZE=1000
-WINDOW_STEP=500
-
-#   And run the analysis!
-${ANGSD_DIR}/misc/thetaStat do_stat\
-    ${TAXON}_Tajimas\
-    -nChr ${N_CHROM}\
-    -win ${WINDOW_SIZE}\
-    -step ${WINDOW_STEP}
