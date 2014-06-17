@@ -118,11 +118,13 @@ MIN_IND=1
 GT_LIKELIHOOD=2
 MIN_MAPQ=30
 N_CORES=32
+DO_MAJORMINOR=1
+DO_MAF=1
 #   REGIONS value yanked from JRI script
 #   will update when we get our regions of interest
-REGIONS="-r 10:"
+REGIONS="morex_contig_43476:1310-3262"
 
-#   Now we actually run the command
+#   Now we actually run the command, this creates a binary file that contains the prior SFS
 ${ANGSD_DIR}/angsd \
     -bam ${TAXON_LIST}\
     -out ${TAXON}_SFSOut\
@@ -138,10 +140,9 @@ ${ANGSD_DIR}/angsd \
     -ref ${REF_DIR}/${REF_SEQ}\
     -GL ${GT_LIKELIHOOD}\
     -P ${N_CORES}\
-    -doCounts\
-    -doDepth\
-    -dumpCounts\
-    ${REGIONS}
+    -doMajorMinor $DO_MAJORMINOR\
+    -doMaf $DO_MAF\
+    -r ${REGIONS}
 
 #   This next command estimates the SFS
 #   Notes from JRI:
