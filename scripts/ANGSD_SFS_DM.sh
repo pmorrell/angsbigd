@@ -26,7 +26,7 @@ DATA_DIR=${SHARED}/Datasets/NGS/Alignments/Deleterious_Mutations
 #   The directory of our reference sequence
 REF_DIR=${SHARED}/References/Reference_Sequences/Barley/Morex
 #   This sequence is the pseudo-scaffolds from Martin
-REF_SEQ=Morex_Reference/fasta
+REF_SEQ=Morex_Reference.fasta
 #   Since ANGSD's version is in the directory name, we reference them both
 #   in this way
 ANGSD_VERSION=0.602
@@ -115,7 +115,7 @@ N_CHROM=`expr 2 \* ${N_IND}`
 DO_SAF=2
 UNIQUE_ONLY=1
 #   Bulbosum sequence for ancestral state
-ANCESTRAL=${DATA_DIR}/Outgroup/Hbulbosum.fa.gz
+ANCESTRAL=${DATA_DIR}/Outgroup/Hbulbosum_UMN.fa.gz
 MIN_BASEQUAL=20
 BAQ=1
 MIN_IND=1
