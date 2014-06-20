@@ -9,6 +9,9 @@
 
 #   Last Modified: 2014-06-11
 #   CHANGES
+#		2014-06-20
+#           - New version of script for analyzing deleterious mutations data
+#             at 18 loci
 #		2014-06-17
 #           - Changed parameters so that we could estimate the derived SFS, required
 #             -doMaf 1 and -doMajorMinor 1 
@@ -21,7 +24,7 @@ SHARED=/home/morrellp/shared
 #	And our data directory
 DATA_DIR=${SHARED}/Datasets/NGS/Alignments/Deleterious_Mutations
 #   The directory of our reference sequence
-REF_DIR=${SHARED}/References/Reference_Sequences/Barley/Morex/
+REF_DIR=${SHARED}/References/Reference_Sequences/Barley/Morex
 #   This sequence is the pseudo-scaffolds from Martin
 REF_SEQ=Morex_Reference/fasta
 #   Since ANGSD's version is in the directory name, we reference them both
@@ -29,7 +32,7 @@ REF_SEQ=Morex_Reference/fasta
 ANGSD_VERSION=0.602
 ANGSD_DIR=${SHARED}/Software/angsd${ANGSD_VERSION}
 #	The file that contains the paths to the BAM files we are analyzing
-DM_BAM_LIST=${DATA_DIR}DM_BAMList.list
+DM_BAM_LIST=${DATA_DIR}/DM_BAMList.list
 DM_INBREEDING=${DATA_DIR}/indF_coeff.txt
 #   The number of individuals in the taxon we are analyzing
 #   We use an embedded command to do this
