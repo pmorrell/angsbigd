@@ -132,7 +132,7 @@ REGIONS=${DATA_DIR}/18Loci_Regions.txt
 ${ANGSD_DIR}/angsd \
     -bam ${DM_BAM_LIST}\
     -out DM_SFSOut\
-    -indF ${TAXON_INBREEDING}\
+    -indF ${DM_INBREEDING}\
     -doSaf ${DO_SAF}\
     -uniqueOnly ${UNIQUE_ONLY}\
     -anc ${ANCESTRAL}\
